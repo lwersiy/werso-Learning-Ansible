@@ -1,0 +1,45 @@
+---
+- name: Setting up webservers
+  hosts: webservers
+  become: true
+  vars_files:
+    - user-details.yml
+  tasks:
+  - name: creating user
+    ansible.builtin.user:
+      name: "{{user}}"
+
+
+
+---
+- name: Install Apache
+  hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: present
+      become: true
+      become_user: root
+      become_method: sudo
+      vars:
+        ansible_become_password: Ptwerso1
+
+
+---
+- name: Install Nginx
+  hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+      become: true
+      become_user: root
+      become_method: sudo
+      vars:
+        ansible_become_password: Ptwerso1
