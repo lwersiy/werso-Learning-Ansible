@@ -1,0 +1,43 @@
+ Dynamic (inventory )CONFIGURATION MANAGEMENT
+    1  sudo apt update -y
+    # update packages
+
+    2  sudo apt install -y ansible
+    # install ansible
+
+    3  sudo apt install python-is-python3
+    4  sudo apt-get install python3-pip -y
+    # install python
+
+    5  sudo pip3 install boto
+    6  sudo pip3 install boto3
+    7  sudo pip install boto3 botocore
+    # install boto collections
+
+    8  ansible-galaxy collection install amazon.aws
+    # install amazon aws galaxy collections
+
+    9  sudo vi aws_ec2.yml
+    # create this file and pass in the below plugin
+plugin: aws_ec2
+
+regions:
+  - us-east-1
+
+filters:
+  # All instances with their `Environment` tag set to `dev`
+#  tag:Environment: dev
+  # All dev and QA hosts
+  tag:Env:
+    - dev
+  # Getting the details of running instances only
+  instance-state-name: running
+# Grouping the instances based on tags
+keyed_groups:
+  - key: tags
+    prefix: tag
+
+   10  sudo vi /etc/ansible/ansible.cfg
+# Uncomment the inventory line and the sudo-user
+
+   11  ansible-inventory -i aws_ec2.yml --list
